@@ -85,7 +85,7 @@ public class Principal {
 			System.out.println("2 - Emprestar livro");
 			System.out.println("3 - Devolver livro");
 			System.out.println("4 - Listar...");
-			System.out.println("5 - Alterrar estado do livro");
+			System.out.println("5 - Alterar estado do livro");
 
 			int choice = scanner.nextInt();
 			scanner.nextLine();
@@ -97,23 +97,23 @@ public class Principal {
 				}
 				case 1 -> {
 					System.out.println("-- Cadastrar");
-					System.out.println("0 - Livro");
-					System.out.println("1 - Amigo");
-					System.out.println("2 - Cancelar");
+					System.out.println("0 - Cancelar");
+					System.out.println("1 - Livro");
+					System.out.println("2 - Amigo");
 
 					choice = scanner.nextInt();
 					scanner.nextLine();
 
 					switch (choice) {
-						case 0 -> {
+						case 0 -> {} // Mesma coisa que "continue;"
+						case 1 -> {
 							System.out.println("-- -- Registrar livro");
 							registerBook();
 						}
-						case 1 -> {
+						case 2 -> {
 							System.out.println("-- -- Registrar amigo");
 							registerFriend();
 						}
-						case 2 -> {} // Mesma coisa que "continue;"
 						default -> printChoiceErrorMessage(choice);
 					}
 				}
@@ -127,51 +127,51 @@ public class Principal {
 				}
 				case 4 -> {
 					System.out.println("-- Listar");
-					System.out.println("0 - Emprestimos atuais");
-					System.out.println("1 - História de emprestimos");
-					System.out.println("2 - Toda a biblioteca");
-					System.out.println("3 - Cancelar");
+					System.out.println("0 - Cancelar");
+					System.out.println("1 - Emprestimos atuais");
+					System.out.println("2 - História de emprestimos");
+					System.out.println("3 - Toda a biblioteca");
 
 					choice = scanner.nextInt();
 					scanner.nextLine();
 
 					switch (choice) {
-						case 0 -> {
+						case 0 -> {} // Mesma coisa que "continue;"
+						case 1 -> {
 							System.out.println("-- -- Listar empréstimos");
 							listLoans();
 						}
-						case 1 -> {
+						case 2 -> {
 							System.out.println("-- -- Listar história de empréstimos");
 							listLoanHistory();
 						}
-						case 2 -> {
+						case 3 -> {
 							System.out.println("-- -- Listar biblioteca");
-							System.out.println("0 - Alfabeticamente");
-							System.out.println("1 - Por index");
-							System.out.println("2 - Cancelar");
+							System.out.println("0 - Cancelar");
+							System.out.println("1 - Alfabeticamente");
+							System.out.println("2 - Por index");
 
 							choice = scanner.nextInt();
 							scanner.nextLine();
 
 							switch (choice) {
-								case 0 -> {
+								case 0 -> {} // Mesma coisa que "continue;"
+								case 1 -> {
 									System.out.println("-- -- -- Listar biblioteca alfabeticamente");
 									listLibrary(LibraryList.ALPHABETICALLY);
 								}
-								case 1 -> {
+								case 2 -> {
 									System.out.println("-- -- -- Listar biblioteca por index");
 									listLibrary(LibraryList.INDEX);
 								}
-								case 2 -> {} // Mesma coisa que "continue;"
 								default -> printChoiceErrorMessage(choice);
 							}
 						}
-						case 3 -> {} // Mesma coisa que "continue;"
 						default -> printChoiceErrorMessage(choice);
 					}
 				}
 				case 5 -> {
-					System.out.println("-- Alterrar estado");
+					System.out.println("-- Alterar estado");
 					changeBookState();
 				}
 				default -> printChoiceErrorMessage(choice);
@@ -224,6 +224,8 @@ public class Principal {
 	public static void borrowBook() {
 		Livro livro = requestBook();
 
+		// TODO - verificar se o livro é disponível
+
 		System.out.println("Informe o nome do amigo:");
 		String nome = scanner.nextLine();
 		
@@ -242,13 +244,13 @@ public class Principal {
 					break;
 				} else if (choice != 'N') {
 					System.out.println("Opa algo deu errado!");
-					break;
+					i--;
 				}
 			}
 		}
 
 		if (amigoFound == null) {
-			System.out.println("Não encontrado nenhum amigo com o nome " + nome + "!");
+			System.out.println("Não foi encontrado nenhum amigo com o nome " + nome + "!");
 			return;
 		}
 
@@ -257,23 +259,29 @@ public class Principal {
 		emprestimos.addEmprestimo(idAmigo, livro.getIdLivro());
 		livro.setEmprestado();
 
-		System.out.println("Emprestimo concluido!");
+		System.out.println("Emprestimo criado!");
 	}
 
 	public static void returnBook() {
 		Livro livro = requestBook();
 
+		// TODO - verificar se não encontrar empréstimo
+
 		for (int i = 0; i < emprestimos.getSize(); i++) {
 			Emprestimo emprestimo = emprestimos.getEmprestimo(i);
 
-			if (emprestimo.getIdLivro() == livro.getIdLivro() && !emprestimo.hasBeenReturned() && livro.getDispLivro() == Disponibilidade.EMPRESTADO) {
+			if (
+				emprestimo.getIdLivro() == livro.getIdLivro() &&
+				!emprestimo.hasBeenReturned() &&
+				livro.getDispLivro() == Disponibilidade.EMPRESTADO
+			) {
 				emprestimo.returnLivro();
 				livro.setDisponivel();
 				break;
 			}
 		}
 
-		System.out.println("Emprestimo concluido com sucesso!");
+		System.out.println("Livro " + livro.getTitulo() + " devolvido!");
 	}
 
 	public static void listLoans() {
@@ -302,6 +310,8 @@ public class Principal {
 
 	public static void listLoanHistory() {
 		Livro livro = requestBook();
+
+		// TODO - verificar se não encontrar empréstimo
 
 		System.out.println("** Livro " + livro.getTitulo());
 
@@ -363,29 +373,36 @@ public class Principal {
 	public static void changeBookState() {
 		Livro livro = requestBook();
 
+		// TODO - adicionar print do título do livro
+		// TODO - adicionar lógica para remover "Consulta local" da lista de possibilidades
+
 		System.out.println("Estado do livro: " + livro.getDispLivro());
 		System.out.println("Mandar para que estado?");
-		System.out.println("0 - Consulta local");
-		System.out.println("1 - Danificado");
-		System.out.println("2 - Extraviado");
-		System.out.println("3 - Cancelar");
+		System.out.println("0 - Cancelar");
+		System.out.println("1 - Consulta local");
+		System.out.println("2 - Danificado");
+		System.out.println("3 - Extraviado");
 
 		int choice = scanner.nextInt();
 		scanner.nextLine();
 
 		switch (choice) {
-			case 0 -> {
+			case 1:
 				if (livro.getDispLivro() == Disponibilidade.EMPRESTADO) {
 					System.out.println("Opa! Não é possível mandar para consulta local um livro que foi emprestado!");
 					return;
 				}
 				livro.setConsultaLocal();
-			}
-			case 1 -> livro.setDanificado();
-			case 2 -> livro.setExtraviado();
-			default -> {
+				break;
+			case 2:
+				livro.setDanificado();
+				break;
+			case 3:
+				livro.setExtraviado();
+				break;
+			case 0:
+			default:
 				return;
-			}
 		}
 
 		System.out.println("Troca de estado concluido!");
