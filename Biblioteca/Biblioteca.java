@@ -19,10 +19,6 @@ public class Biblioteca {
 		this.investimento = investimento;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
 	public float getInvestimento() {
 		return investimento;
 	}

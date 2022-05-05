@@ -23,32 +23,12 @@ public class Livro implements Comparable<Livro> {
 		return idLivro;
 	}
 
-	public void setIdLivro(int idLivro) {
-		this.idLivro = idLivro;
-	}
-
 	public String getTitulo() {
 		return titulo;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
-	public String getAutor() {
-		return autor;
-	}
-
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
-
 	public float getPreco() {
 		return preco;
-	}
-
-	public void setPreco(float preco) {
-		this.preco = preco;
 	}
 
 	public Disponibilidade getDispLivro() {
@@ -78,5 +58,10 @@ public class Livro implements Comparable<Livro> {
 	@Override
 	public int compareTo(Livro o) {
 		return this.titulo.compareToIgnoreCase(o.getTitulo());
+	}
+
+	@Override
+	public String toString() {
+		return this.titulo + " [" + this.idLivro + "]";
 	}
 }

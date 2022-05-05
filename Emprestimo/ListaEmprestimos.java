@@ -5,7 +5,6 @@ public class ListaEmprestimos {
 
 	private final ArrayList<Emprestimo> alEmprestimos;
 
-	// construtor cria alEmprestimos, ArrayList que fica encapsulado na classe ListaEmprestimos
 	public ListaEmprestimos() {
 		super();
 		this.alEmprestimos = new ArrayList<Emprestimo>();
